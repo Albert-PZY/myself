@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Albert · 全栈与 AI 开发工程师" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Albert · Resume</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23c8ff00'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-size='16' font-family='Arial Black,sans-serif' font-weight='900' fill='%230a0a0a'%3EA%3C/text%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <!-- atmosphere (CSS-only layers, transform animations) -->
+    <div class="bg-layer bg-layer--glow" aria-hidden="true"></div>
+    <div class="bg-layer bg-layer--grid" aria-hidden="true"></div>
+    <div class="bg-layer bg-layer--dots" aria-hidden="true"></div>
+    <div class="bg-layer bg-layer--hatch" aria-hidden="true"></div>
+    <div class="bg-layer bg-layer--mesh" aria-hidden="true"></div>
+    <div class="float-orbs" aria-hidden="true">
+      <span class="float-orb float-orb--1"></span>
+      <span class="float-orb float-orb--2"></span>
+      <span class="float-orb float-orb--3"></span>
+    </div>
+    <canvas id="particleCanvas" aria-hidden="true"></canvas>
+    <div class="scanline" aria-hidden="true"></div>
+    <div class="scan-beam" aria-hidden="true"></div>
+    <div class="progress" id="progressBar" aria-hidden="true"></div>
+
+    <!-- lightweight SVG ornaments (transform / stroke only) -->
+    <svg class="deco-fixed" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <linearGradient id="decoGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="var(--accent-pop)" stop-opacity="0.55" />
+          <stop offset="100%" stop-color="var(--cyber)" stop-opacity="0.25" />
+        </linearGradient>
+      </defs>
+      <!-- page edge ticks -->
+      <g class="deco-ticks" stroke="var(--accent-pop)" stroke-width="1.5" opacity="0.35">
+        <path d="M24 120 h18 M24 160 h12 M24 200 h18" />
+        <path d="M1416 720 h-18 M1416 760 h-12 M1416 800 h-18" />
+      </g>
+      <!-- constellation -->
+      <g class="deco-const" fill="none" stroke="url(#decoGrad)" stroke-width="1" opacity="0.4">
+        <path d="M180 140 L260 200 L220 280 L320 300" />
+        <path d="M1100 120 L1180 180 L1260 150 L1320 230" />
+        <circle cx="180" cy="140" r="3" fill="var(--accent-pop)" stroke="none" opacity="0.7" />
+        <circle cx="260" cy="200" r="2.5" fill="var(--cyber)" stroke="none" opacity="0.6" />
+        <circle cx="320" cy="300" r="2.5" fill="var(--accent-pop)" stroke="none" opacity="0.55" />
+        <circle cx="1180" cy="180" r="3" fill="var(--cyber)" stroke="none" opacity="0.65" />
+        <circle cx="1320" cy="230" r="2.5" fill="var(--accent-pop)" stroke="none" opacity="0.55" />
+      </g>
+      <!-- slow orbit ring (top-right) -->
+      <g class="deco-orbit" transform="translate(1240 160)">
+        <ellipse rx="90" ry="34" fill="none" stroke="var(--cyber)" stroke-width="1" stroke-dasharray="4 8" opacity="0.35">
+          <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="48s" repeatCount="indefinite" />
+        </ellipse>
+        <ellipse rx="58" ry="22" fill="none" stroke="var(--accent-pop)" stroke-width="1" stroke-dasharray="3 7" opacity="0.3">
+          <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="32s" repeatCount="indefinite" />
+        </ellipse>
+        <circle r="3" fill="var(--accent-pop)" opacity="0.7" />
+      </g>
+      <!-- circuit fragment bottom-left -->
+      <g class="deco-circuit" fill="none" stroke="var(--ink)" stroke-opacity="0.12" stroke-width="1.2">
+        <path d="M80 780 H160 V740 H220 V800 H300" />
+        <path d="M120 800 V840 H200" />
+        <circle cx="160" cy="740" r="3" fill="var(--accent-pop)" fill-opacity="0.35" stroke="none" />
+        <circle cx="220" cy="800" r="3" fill="var(--cyber)" fill-opacity="0.35" stroke="none" />
+        <rect x="292" y="792" width="16" height="16" fill="none" stroke="var(--accent-pop)" stroke-opacity="0.35" />
+      </g>
+    </svg>
+
+    <div class="edit-banner" id="editBanner" hidden>
+      <div class="wrap edit-banner__inner">
+        <b>EDIT MODE</b>
+        <span>点文字改内容 · [+] / [×] 增删 · Esc 退出</span>
+        <div class="edit-banner__actions">
+          <button type="button" class="btn btn--sm btn--solid" id="exportBtn">导出 JSON</button>
+          <button type="button" class="btn btn--sm btn--ghost" id="resetBtn">重置</button>
+          <button type="button" class="btn btn--sm btn--ghost" id="exitEditBtn">退出</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- compact chrome: HUD + nav in one sticky stack -->
+    <header class="topbar" id="nav">
+      <div class="topbar__hud" aria-hidden="true">
+        <span class="sys-hud__item"><i></i> LIVE
+          <span class="eq" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></span>
+        </span>
+        <span class="sys-hud__sep">·</span>
+        <span class="sys-hud__item" id="hudDate">—</span>
+        <span class="sys-hud__sep">·</span>
+        <span class="sys-hud__item sys-hud__item--time" id="hudClock">--:--:--</span>
+        <span class="sys-hud__sep">·</span>
+        <span class="sys-hud__item" id="hudTz">UTC+00:00</span>
+        <span class="sys-hud__sep">·</span>
+        <span class="sys-hud__item" id="hudScroll">SCR 0%</span>
+        <span class="sys-hud__sep">·</span>
+        <span class="sys-hud__item" id="hudSignal">SIG ▮▮▮▯▯</span>
+      </div>
+      <div class="wrap topbar__inner">
+        <a class="logo" href="#top">
+          <span class="logo__mark">A</span>
+          <span class="logo__text" data-edit-path="profile.name">Albert</span>
+        </a>
+        <nav class="topbar__nav" aria-label="导航">
+          <a href="#about">About</a>
+          <a href="#skills">Skills</a>
+          <a href="#projects">Work</a>
+          <a href="#experience">Path</a>
+          <a href="#contact">Contact</a>
+        </nav>
+        <div class="topbar__tools">
+          <button type="button" class="icon-btn" id="themeToggle" aria-label="切换主题" title="主题">
+            <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 14.5A8.5 8.5 0 0 1 9.5 3 7 7 0 1 0 21 14.5z" />
+            </svg>
+            <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+            </svg>
+          </button>
+          <button type="button" class="icon-btn" id="printBtn" aria-label="打印" title="打印">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+              <rect x="6" y="14" width="12" height="7" rx="1" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="top">
+      <!-- HERO -->
+      <section class="hero">
+        <div class="wrap hero__wrap">
+          <div class="hud-frame" aria-hidden="true">
+            <span class="hud-corner hud-corner--tl"></span>
+            <span class="hud-corner hud-corner--tr"></span>
+            <span class="hud-corner hud-corner--bl"></span>
+            <span class="hud-corner hud-corner--br"></span>
+          </div>
+
+          <!-- hero circuit watermark -->
+          <svg class="hero-svg" viewBox="0 0 420 280" aria-hidden="true">
+            <defs>
+              <linearGradient id="heroSvgGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="var(--accent-pop)" stop-opacity="0.5" />
+                <stop offset="100%" stop-color="var(--cyber)" stop-opacity="0.2" />
+              </linearGradient>
+            </defs>
+            <rect x="20" y="30" width="380" height="220" rx="8" fill="none" stroke="url(#heroSvgGrad)" stroke-width="1" stroke-dasharray="6 10" opacity="0.5">
+              <animate attributeName="stroke-dashoffset" values="0;32" dur="12s" repeatCount="indefinite" />
+            </rect>
+            <path d="M60 80 H140 V120 H200 M200 120 V180 H280 M280 180 H360" fill="none" stroke="url(#heroSvgGrad)" stroke-width="1.4" opacity="0.55" />
+            <path d="M80 200 H160 V160 H240" fill="none" stroke="var(--cyber)" stroke-width="1" opacity="0.35" />
+            <circle cx="140" cy="120" r="4" fill="var(--accent-pop)" opacity="0.55" />
+            <circle cx="200" cy="120" r="4" fill="var(--cyber)" opacity="0.5" />
+            <circle cx="280" cy="180" r="4" fill="var(--accent-pop)" opacity="0.5" />
+            <text x="70" y="70" fill="var(--ink)" fill-opacity="0.18" font-family="IBM Plex Mono, monospace" font-size="11">NODE_GRAPH</text>
+            <text x="300" y="230" fill="var(--ink)" fill-opacity="0.15" font-family="IBM Plex Mono, monospace" font-size="10">0xA1 / READY</text>
+          </svg>
+
+          <div class="hero__meta">
+            <span class="live">
+              <i></i>
+              <span data-edit-path="profile.status">Open to work</span>
+            </span>
+            <span class="hero__chip mono">ID://ALBERT-PZY</span>
+            <span class="hero__loc" data-edit-path="profile.location">北京 / 远程</span>
+          </div>
+
+          <h1 class="hero__name">
+            <span class="hero__hello">
+              <span class="terminal-prefix">&gt;_</span> HELLO, I'M
+            </span>
+            <span
+              class="hero__display glitch"
+              data-edit-path="profile.name"
+              data-text="Albert"
+              id="heroDisplay"
+              >Albert</span
+            >
+          </h1>
+
+          <p class="hero__tag" data-edit-path="profile.tagline"></p>
+          <p class="hero__summary" data-edit-path="profile.summary"></p>
+
+          <div class="hero__row">
+            <div class="hero__cta">
+              <a class="btn btn--solid btn--lg btn--cyber" href="#projects">
+                <span class="btn__glow" aria-hidden="true"></span>
+                <span class="btn__label">看作品 →</span>
+              </a>
+              <a class="btn btn--ghost btn--lg" id="githubCta" href="https://github.com/Albert-PZY" target="_blank" rel="noreferrer">GitHub</a>
+              <a class="btn btn--ghost btn--lg" href="#contact">联系</a>
+            </div>
+            <div class="hero__portrait">
+              <div class="portrait cyber-panel">
+                <span class="panel-corner panel-corner--tl"></span>
+                <span class="panel-corner panel-corner--tr"></span>
+                <span class="panel-corner panel-corner--bl"></span>
+                <span class="panel-corner panel-corner--br"></span>
+                <div class="portrait__scan"></div>
+                <img id="avatarImg" src="https://avatars.githubusercontent.com/u/144330026?v=4" alt="Albert" width="120" height="120" />
+                <div class="portrait__badge" data-edit-path="profile.title">Engineer</div>
+              </div>
+              <div class="portrait__en mono" data-edit-path="profile.nameEn">Albert-PZY</div>
+            </div>
+          </div>
+
+          <div class="bento cyber-panel" id="highlights"></div>
+        </div>
+
+        <div class="marquee" aria-hidden="true">
+          <div class="marquee__track" id="marqueeTrack">
+            <div class="marquee__group">
+              <span>FULL-STACK</span><span>//</span>
+              <span>RAG</span><span>//</span>
+              <span>AGENT</span><span>//</span>
+              <span>ELECTRON</span><span>//</span>
+              <span>TYPESCRIPT</span><span>//</span>
+              <span>LOCAL-FIRST</span><span>//</span>
+              <span>0xCYBER</span><span>//</span>
+            </div>
+            <div class="marquee__group" aria-hidden="true">
+              <span>FULL-STACK</span><span>//</span>
+              <span>RAG</span><span>//</span>
+              <span>AGENT</span><span>//</span>
+              <span>ELECTRON</span><span>//</span>
+              <span>TYPESCRIPT</span><span>//</span>
+              <span>LOCAL-FIRST</span><span>//</span>
+              <span>0xCYBER</span><span>//</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="svg-divider wrap" aria-hidden="true">
+        <svg viewBox="0 0 960 24" preserveAspectRatio="none">
+          <path d="M0 12 H420" stroke="var(--line)" stroke-width="2" />
+          <path d="M420 12 L440 4 L460 20 L480 12 H960" fill="none" stroke="var(--accent-pop)" stroke-width="2" />
+          <circle cx="440" cy="4" r="2.5" fill="var(--accent-pop)" />
+          <circle cx="460" cy="20" r="2.5" fill="var(--cyber)" />
+        </svg>
+      </div>
+
+      <!-- ABOUT -->
+      <section class="block" id="about">
+        <div class="wrap">
+          <header class="block__head">
+            <span class="block__no">01</span>
+            <div>
+              <p class="block__kicker">About</p>
+              <h2 class="block__title">关于我</h2>
+            </div>
+            <svg class="block__glyph" viewBox="0 0 48 48" aria-hidden="true">
+              <rect x="6" y="6" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2" />
+              <path d="M14 30 V18 H22 M26 18 H34 V30 M26 24 H32" fill="none" stroke="currentColor" stroke-width="2" />
+            </svg>
+          </header>
+          <div class="about-grid">
+            <div class="about-copy" id="aboutCopy"></div>
+            <aside class="about-side cyber-panel">
+              <span class="panel-corner panel-corner--tl"></span>
+              <span class="panel-corner panel-corner--tr"></span>
+              <span class="panel-corner panel-corner--bl"></span>
+              <span class="panel-corner panel-corner--br"></span>
+              <svg class="stamp" viewBox="0 0 200 200" aria-hidden="true">
+                <defs>
+                  <linearGradient id="stampGrad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="var(--accent)" />
+                    <stop offset="100%" stop-color="var(--cyber)" />
+                  </linearGradient>
+                </defs>
+                <circle cx="100" cy="100" r="92" fill="none" stroke="url(#stampGrad)" stroke-width="3" stroke-dasharray="8 6" />
+                <circle cx="100" cy="100" r="70" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.5" />
+                <path d="M100 20 L108 45 L100 40 L92 45 Z" fill="var(--accent)" opacity="0.8" />
+                <text x="100" y="88" text-anchor="middle" font-size="16" font-family="Archivo Black, sans-serif" fill="currentColor">BUILD</text>
+                <text x="100" y="112" text-anchor="middle" font-size="16" font-family="Archivo Black, sans-serif" fill="url(#stampGrad)">SHIP</text>
+                <text x="100" y="138" text-anchor="middle" font-size="10" font-family="IBM Plex Mono, monospace" fill="currentColor" opacity="0.65">NODE.EST.2025</text>
+              </svg>
+              <div class="terminal-log" aria-hidden="true">
+                <div><span class="t-ok">ok</span> boot sequence</div>
+                <div><span class="t-ok">ok</span> modules loaded</div>
+                <div><span class="t-run">··</span> awaiting signal_</div>
+              </div>
+              <p class="about-side__note">不堆概念，只交付能跑、能维、能扩的系统。</p>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- SKILLS -->
+      <section class="block block--alt" id="skills">
+        <svg class="section-watermark" viewBox="0 0 200 200" aria-hidden="true">
+          <g fill="none" stroke="currentColor" stroke-width="1" opacity="0.5">
+            <polygon points="100,20 160,55 160,125 100,160 40,125 40,55" />
+            <polygon points="100,48 138,70 138,114 100,136 62,114 62,70" />
+            <circle cx="100" cy="100" r="8" />
+            <path d="M100 20 V48 M160 55 L138 70 M160 125 L138 114 M100 160 V136 M40 125 L62 114 M40 55 L62 70" />
+          </g>
+        </svg>
+        <div class="wrap">
+          <header class="block__head">
+            <span class="block__no">02</span>
+            <div>
+              <p class="block__kicker">Skills</p>
+              <h2 class="block__title">能力</h2>
+            </div>
+            <svg class="block__glyph" viewBox="0 0 48 48" aria-hidden="true">
+              <path d="M10 14 H38 M10 24 H30 M10 34 H34" fill="none" stroke="currentColor" stroke-width="2" />
+              <circle cx="38" cy="14" r="3" fill="currentColor" />
+              <circle cx="30" cy="24" r="3" fill="currentColor" />
+              <circle cx="34" cy="34" r="3" fill="currentColor" />
+            </svg>
+          </header>
+          <div class="skill-board" id="skillGroups"></div>
+        </div>
+      </section>
+
+      <div class="svg-divider wrap" aria-hidden="true">
+        <svg viewBox="0 0 960 24" preserveAspectRatio="none">
+          <path d="M0 12 H960" stroke="var(--line)" stroke-width="2" />
+          <rect x="460" y="4" width="16" height="16" fill="var(--bg)" stroke="var(--accent-pop)" stroke-width="2" transform="rotate(45 468 12)" />
+        </svg>
+      </div>
+
+      <!-- PROJECTS -->
+      <section class="block" id="projects">
+        <div class="wrap">
+          <header class="block__head">
+            <span class="block__no">03</span>
+            <div>
+              <p class="block__kicker">Selected Work</p>
+              <h2 class="block__title">代表项目</h2>
+            </div>
+            <svg class="block__glyph" viewBox="0 0 48 48" aria-hidden="true">
+              <rect x="8" y="10" width="32" height="28" fill="none" stroke="currentColor" stroke-width="2" />
+              <path d="M8 18 H40 M16 10 V18 M32 10 V18" fill="none" stroke="currentColor" stroke-width="2" />
+            </svg>
+          </header>
+          <div class="work-list" id="projectGrid"></div>
+
+          <header class="block__head block__head--sub">
+            <span class="block__no block__no--sm">+</span>
+            <div>
+              <p class="block__kicker">Also</p>
+              <h2 class="block__title block__title--sm">更多项目</h2>
+            </div>
+          </header>
+          <div class="also-grid" id="moreGrid"></div>
+        </div>
+      </section>
+
+      <!-- EXPERIENCE -->
+      <section class="block block--alt" id="experience">
+        <svg class="section-watermark section-watermark--path" viewBox="0 0 240 80" aria-hidden="true">
+          <path d="M10 40 H70 L90 20 H140 L160 55 H230" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="6 6" opacity="0.45">
+            <animate attributeName="stroke-dashoffset" values="0;24" dur="8s" repeatCount="indefinite" />
+          </path>
+          <circle cx="70" cy="40" r="4" fill="currentColor" opacity="0.5" />
+          <circle cx="140" cy="20" r="4" fill="currentColor" opacity="0.5" />
+          <circle cx="160" cy="55" r="4" fill="currentColor" opacity="0.5" />
+        </svg>
+        <div class="wrap">
+          <header class="block__head">
+            <span class="block__no">04</span>
+            <div>
+              <p class="block__kicker">Experience</p>
+              <h2 class="block__title">经历</h2>
+            </div>
+            <svg class="block__glyph" viewBox="0 0 48 48" aria-hidden="true">
+              <path d="M8 36 L20 16 L28 28 L40 12" fill="none" stroke="currentColor" stroke-width="2" />
+              <circle cx="20" cy="16" r="2.5" fill="currentColor" />
+              <circle cx="28" cy="28" r="2.5" fill="currentColor" />
+              <circle cx="40" cy="12" r="2.5" fill="currentColor" />
+            </svg>
+          </header>
+          <div class="path-list" id="timeline"></div>
+        </div>
+      </section>
+
+      <!-- EDUCATION -->
+      <section class="block" id="education">
+        <div class="wrap">
+          <header class="block__head">
+            <span class="block__no">05</span>
+            <div>
+              <p class="block__kicker">Education</p>
+              <h2 class="block__title">教育</h2>
+            </div>
+            <svg class="block__glyph" viewBox="0 0 48 48" aria-hidden="true">
+              <path d="M8 20 L24 12 L40 20 L24 28 Z" fill="none" stroke="currentColor" stroke-width="2" />
+              <path d="M14 23 V32 C14 32 24 36 34 32 V23" fill="none" stroke="currentColor" stroke-width="2" />
+            </svg>
+          </header>
+          <div class="edu-list" id="eduGrid"></div>
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section class="block block--contact" id="contact">
+        <div class="wrap">
+          <header class="block__head">
+            <span class="block__no">06</span>
+            <div>
+              <p class="block__kicker">Contact</p>
+              <h2 class="block__title" data-edit-path="contact.title">联系</h2>
+            </div>
+            <svg class="block__glyph" viewBox="0 0 48 48" aria-hidden="true">
+              <rect x="8" y="12" width="32" height="24" fill="none" stroke="currentColor" stroke-width="2" />
+              <path d="M8 14 L24 26 L40 14" fill="none" stroke="currentColor" stroke-width="2" />
+            </svg>
+          </header>
+          <div class="contact-slab">
+            <svg class="contact-wave" viewBox="0 0 320 48" aria-hidden="true">
+              <path class="contact-wave__path" d="M0 24 C20 8, 40 40, 60 24 S100 8, 120 24 S160 40, 180 24 S220 8, 240 24 S280 40, 300 24 S320 8, 320 24" fill="none" stroke="var(--accent-pop)" stroke-width="2" opacity="0.55">
+                <animate attributeName="stroke-dasharray" values="8 12;16 8;8 12" dur="4s" repeatCount="indefinite" />
+              </path>
+              <path d="M0 30 C20 18, 40 36, 60 30 S100 18, 120 30 S160 36, 180 30 S220 18, 240 30 S280 36, 300 30" fill="none" stroke="var(--cyber)" stroke-width="1.2" opacity="0.35" />
+            </svg>
+            <p class="contact-slab__lead" data-edit-path="contact.description"></p>
+            <div class="contact-slab__links" id="contactLinks"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="wrap footer__inner">
+        <span data-edit-path="footer.copyright">© Albert</span>
+        <svg class="footer-mark" viewBox="0 0 64 24" aria-hidden="true">
+          <rect x="1" y="1" width="22" height="22" fill="var(--accent-pop)" stroke="var(--ink)" stroke-width="2" />
+          <text x="12" y="17" text-anchor="middle" font-size="12" font-family="Archivo Black, sans-serif" fill="var(--accent-ink)">A</text>
+          <path d="M30 12 H62" stroke="var(--line)" stroke-width="2" />
+          <circle cx="46" cy="12" r="3" fill="var(--accent-pop)" />
+        </svg>
+      </div>
+    </footer>
+
+    <div class="dock">
+      <button type="button" class="icon-btn" id="topBtn" title="顶部" aria-label="回到顶部">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7" /></svg>
+      </button>
+      <button type="button" class="fab" id="editOpen" title="编辑 (Ctrl+E)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z" />
+        </svg>
+        <span>编辑</span>
+      </button>
+    </div>
+
+    <div class="toast" id="toast" role="status"></div>
+
+    <script src="./data.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
