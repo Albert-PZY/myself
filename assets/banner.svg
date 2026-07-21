@@ -1,20 +1,151 @@
-<svg width="800" height="160" viewBox="0 0 800 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Albert">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">Albert — Full-stack &amp; AI Engineer</title>
+  <desc id="desc">个人介绍与在线简历：全栈、RAG / Agent、Electron 桌面端</desc>
+
   <defs>
-    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#c8ff00"/>
-      <stop offset="100%" stop-color="#7dd3fc"/>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b0c0f"/>
+      <stop offset="55%" stop-color="#12141a"/>
+      <stop offset="100%" stop-color="#0e1116"/>
     </linearGradient>
-    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
-      <path d="M24 0H0V24" fill="none" stroke="#1a1a1a" stroke-width="0.6"/>
+    <linearGradient id="lime" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#c8ff00"/>
+      <stop offset="100%" stop-color="#9be000"/>
+    </linearGradient>
+    <linearGradient id="cyan" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5ec8d6"/>
+      <stop offset="100%" stop-color="#2a8f9c"/>
+    </linearGradient>
+    <linearGradient id="panelGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a1d24"/>
+      <stop offset="100%" stop-color="#12141a"/>
+    </linearGradient>
+    <linearGradient id="barA" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#c8ff00"/>
+      <stop offset="100%" stop-color="#c8ff00" stop-opacity="0.25"/>
+    </linearGradient>
+    <linearGradient id="barB" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#5ec8d6"/>
+      <stop offset="100%" stop-color="#5ec8d6" stop-opacity="0.25"/>
+    </linearGradient>
+    <radialGradient id="glowLime" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#c8ff00" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#c8ff00" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowCyan" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#5ec8d6" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#5ec8d6" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="microGrid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" fill="none" stroke="#ffffff" stroke-opacity="0.035" stroke-width="1"/>
     </pattern>
+    <filter id="softGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <clipPath id="frameClip">
+      <rect width="1200" height="360" rx="22"/>
+    </clipPath>
   </defs>
-  <rect width="800" height="160" rx="16" fill="#0a0a0a"/>
-  <rect width="800" height="160" rx="16" fill="url(#grid)" opacity="0.55"/>
-  <circle cx="720" cy="40" r="48" fill="none" stroke="url(#g)" stroke-width="1.2" opacity="0.35"/>
-  <circle cx="720" cy="40" r="28" fill="none" stroke="#c8ff00" stroke-width="0.8" opacity="0.25"/>
-  <path d="M0 120 Q200 90 400 115 T800 100" fill="none" stroke="#c8ff00" stroke-width="1" opacity="0.35"/>
-  <path d="M0 135 Q250 110 500 130 T800 118" fill="none" stroke="#7dd3fc" stroke-width="0.8" opacity="0.25"/>
-  <text x="48" y="72" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="36" font-weight="800" fill="#f5f5f5">Albert</text>
-  <text x="48" y="104" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" fill="#a3a3a3">全栈 · AI 应用 · 个人主页</text>
-  <rect x="48" y="122" width="56" height="4" rx="2" fill="url(#g)"/>
+
+  <g id="base" clip-path="url(#frameClip)">
+    <rect width="1200" height="360" fill="url(#bgGrad)"/>
+    <rect width="1200" height="360" fill="url(#microGrid)"/>
+
+    <!-- ambient glows -->
+    <circle id="glow-left" cx="210" cy="80" r="140" fill="url(#glowLime)"/>
+    <circle id="glow-right" cx="980" cy="280" r="160" fill="url(#glowCyan)"/>
+
+    <!-- left accent rail -->
+    <rect id="accent-rail" x="0" y="0" width="7" height="360" fill="url(#lime)"/>
+
+    <!-- neo-brutal corner brackets -->
+    <g id="brackets" fill="none" stroke="#3a3d46" stroke-width="2">
+      <path d="M36 54h28M36 54v28"/>
+      <path d="M1164 54h-28M1164 54v28"/>
+      <path d="M36 306h28M36 306v-28"/>
+      <path d="M1164 306h-28M1164 306v-28"/>
+    </g>
+
+    <!-- faint network graph (AI motif) -->
+    <g id="network" stroke="#5ec8d6" stroke-opacity="0.22" stroke-width="1.2" fill="none">
+      <path d="M620 70 L680 120 L760 95 L820 150 L900 110"/>
+      <path d="M640 180 L700 140 L760 190 L840 160 L910 200"/>
+      <path d="M680 120 L700 140 M760 95 L760 190 M820 150 L840 160"/>
+    </g>
+    <g id="nodes" fill="#c8ff00">
+      <circle cx="620" cy="70" r="3.5" opacity="0.7"/>
+      <circle cx="680" cy="120" r="4" fill="#5ec8d6"/>
+      <circle cx="760" cy="95" r="3.5" opacity="0.85"/>
+      <circle cx="820" cy="150" r="4"/>
+      <circle cx="900" cy="110" r="3.5" fill="#5ec8d6" opacity="0.8"/>
+      <circle cx="640" cy="180" r="3" opacity="0.55"/>
+      <circle cx="700" cy="140" r="3.5" fill="#5ec8d6"/>
+      <circle cx="760" cy="190" r="3" opacity="0.65"/>
+      <circle cx="840" cy="160" r="3.5"/>
+      <circle cx="910" cy="200" r="3" fill="#5ec8d6" opacity="0.7"/>
+    </g>
+
+    <!-- title block -->
+    <g id="title-block">
+      <rect x="56" y="56" width="118" height="26" rx="6" fill="#1a1d24" stroke="#2f333c"/>
+      <text x="68" y="74" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#c8ff00" letter-spacing="1.6">RESUME</text>
+
+      <text x="56" y="148" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="68" font-weight="800" fill="#f4f5f7">Albert</text>
+      <text x="56" y="188" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="24" font-weight="500" fill="#aeb2bb">全栈与 AI 应用开发工程师</text>
+      <text x="56" y="228" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="18" fill="#7d818c">个人介绍 · 项目经历 · 技能与状态</text>
+
+      <rect id="title-underline" x="56" y="248" width="88" height="5" rx="2.5" fill="url(#lime)"/>
+
+      <g id="meta-pills" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14">
+        <rect x="56" y="278" width="132" height="32" rx="8" fill="#151820" stroke="#2c303a"/>
+        <text x="72" y="299" fill="#9aa0ab">TS / Python</text>
+        <rect x="200" y="278" width="148" height="32" rx="8" fill="#151820" stroke="#2c303a"/>
+        <text x="216" y="299" fill="#9aa0ab">RAG &amp; Agent</text>
+        <rect x="360" y="278" width="120" height="32" rx="8" fill="#151820" stroke="#2c303a"/>
+        <text x="376" y="299" fill="#9aa0ab">Electron</text>
+      </g>
+    </g>
+
+    <!-- right HUD panel -->
+    <g id="hud-panel">
+      <rect x="760" y="48" width="384" height="264" rx="16" fill="url(#panelGrad)" stroke="#32363f" stroke-width="1.5"/>
+      <rect x="760" y="48" width="384" height="44" rx="16" fill="#1c2028"/>
+      <rect x="760" y="76" width="384" height="16" fill="#1c2028"/>
+      <circle cx="786" cy="70" r="5" fill="#ff5c7a"/>
+      <circle cx="806" cy="70" r="5" fill="#c8ff00"/>
+      <circle cx="826" cy="70" r="5" fill="#5ec8d6"/>
+      <text x="848" y="75" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#8b909c">profile.hud</text>
+
+      <!-- avatar monogram -->
+      <g id="avatar">
+        <circle cx="824" cy="148" r="36" fill="#0f1116" stroke="#c8ff00" stroke-width="2"/>
+        <circle cx="824" cy="148" r="28" fill="#161a22" stroke="#2f333c"/>
+        <text x="824" y="158" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="28" font-weight="800" fill="#c8ff00">A</text>
+      </g>
+
+      <text x="880" y="138" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif" font-size="22" font-weight="700" fill="#f0f1f3">Albert-PZY</text>
+      <text x="880" y="164" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#7d838f">Beijing · Remote · Open</text>
+      <rect x="880" y="176" width="92" height="22" rx="11" fill="#1f2a14" stroke="#5a7a18"/>
+      <circle cx="894" cy="187" r="4" fill="#c8ff00"/>
+      <text x="904" y="191" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" fill="#c8ff00">ACTIVE</text>
+
+      <!-- meters -->
+      <g id="meters" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13">
+        <text x="792" y="236" fill="#8b909c">Full-stack</text>
+        <rect x="792" y="244" width="320" height="8" rx="4" fill="#0f1116"/>
+        <rect id="meter-a" x="792" y="244" width="276" height="8" rx="4" fill="url(#barA)"/>
+
+        <text x="792" y="278" fill="#8b909c">LLM / RAG</text>
+        <rect x="792" y="286" width="320" height="8" rx="4" fill="#0f1116"/>
+        <rect id="meter-b" x="792" y="286" width="248" height="8" rx="4" fill="url(#barB)"/>
+      </g>
+    </g>
+
+    <!-- scan line decoration -->
+    <rect id="scanline" x="0" y="168" width="1200" height="1" fill="#c8ff00" opacity="0.08"/>
+  </g>
 </svg>

@@ -7,6 +7,25 @@
   const STORAGE_KEY = "albert-resume-data-v1";
   const THEME_KEY = "albert-resume-theme";
 
+  /**
+   * Edit tools only for local preview (file:// / localhost).
+   * GitHub Pages and other public hosts always serve data.js as-is.
+   */
+  const EDIT_ENABLED = (function isLocalEditHost() {
+    try {
+      const { protocol, hostname } = window.location;
+      if (protocol === "file:") return true;
+      if (hostname === "localhost" || hostname === "127.0.0.1" || hostname === "[::1]") {
+        return true;
+      }
+      // optional LAN preview: 192.168.x / 10.x / 172.16-31.x
+      if (/^(192\.168\.|10\.|172\.(1[6-9]|2\d|3[0-1])\.)/.test(hostname)) return true;
+      return false;
+    } catch (_) {
+      return false;
+    }
+  })();
+
   let data = loadData();
   let isEditingMode = false;
 
@@ -15,6 +34,8 @@
   }
 
   function loadData() {
+    // Public deploy: never merge visitor localStorage over the published resume.
+    if (!EDIT_ENABLED) return deepClone(window.RESUME_DATA);
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) return mergeDeep(deepClone(window.RESUME_DATA), JSON.parse(raw));
@@ -43,7 +64,10 @@
 
   function persist(next) {
     data = next;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+    if (!EDIT_ENABLED) return;
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+    } catch (_) {}
   }
 
   function initTheme() {
@@ -989,6 +1013,7 @@
   }
 
   function toggleEditing(active) {
+    if (!EDIT_ENABLED) return;
     // Esc / 快捷键退出时不会先 blur，必须在 renderAll 前落盘
     if (!active && isEditingMode) {
       commitPendingEdits();
@@ -1032,7 +1057,22 @@
     toast("已重置");
   }
 
+  function stripEditorChrome() {
+    document.body.classList.add("is-public");
+    document.body.classList.remove("is-editing");
+    const fab = $("#editOpen");
+    if (fab) fab.remove();
+    const banner = $("#editBanner");
+    if (banner) banner.remove();
+  }
+
   function initEditor() {
+    if (!EDIT_ENABLED) {
+      stripEditorChrome();
+      return;
+    }
+
+    document.body.classList.add("is-local-edit");
     $("#editOpen")?.addEventListener("click", () => toggleEditing(!isEditingMode));
     $("#exitEditBtn")?.addEventListener("click", () => toggleEditing(false));
     $("#exportBtn")?.addEventListener("click", exportJson);

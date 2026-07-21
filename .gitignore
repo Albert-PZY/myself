@@ -5,3 +5,8 @@ desktop.ini
 .idea/
 .vscode/
 *.local
+
+# agent skill installs (use global ~/.agents or ~/.grok/skills)
+.agents/
+.claude/
+skills-lock.json

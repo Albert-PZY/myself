@@ -2096,6 +2096,12 @@ html[data-theme="light"] .tl-role {
   color: var(--ink);
 }
 
+/* public deploy: no edit chrome */
+body.is-public #editOpen,
+body.is-public #editBanner {
+  display: none !important;
+}
+
 /* ---------- edit mode ---------- */
 .editable-active {
   outline: 2px dashed var(--accent) !important;
