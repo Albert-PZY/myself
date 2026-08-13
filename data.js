@@ -16,7 +16,7 @@ window.RESUME_DATA = {
     "title": "全栈与 AI 应用开发工程师",
     "tagline": "AI 工程师 / LLM Agent 全栈开发工程师",
     "avatar": "https://avatars.githubusercontent.com/u/144330026?v=4",
-    "location": "广东 / 远程 / 可协商",
+    "location": "广东 / 远程&线下 / 可协商",
     "status": "随时入职 · 寻找 AI Agent 全栈开发岗位",
     "summary": "具备 AI 应用全栈与 LLM Agent 工程实践能力，熟练使用 Codex、Claude Code、Cursor 等 AI 编程工具，并掌握 Vibe Coding 智能生成式开发范式，能够基于自然语言意图快速完成项目的工程化落地，高质量完成从需求拆解至代码交付的全流程协同开发与效率提升。深耕后端架构、异步并发、状态治理与评估落地，沉淀可复用的工程化方案，持续关注系统可用性、性能优化与工程可追溯性。",
     "about": [
@@ -217,13 +217,14 @@ window.RESUME_DATA = {
       "link": "https://github.com/Albert-PZY/motion-reel"
     },
     {
-      "name": "mcp-tutorial",
-      "description": "Model Context Protocol (MCP) 最小可行性实践示例，包含 Stdio 与 SSE 两种连接机制，开箱即用。",
+      "name": "learn-pi-agent",
+      "description": "Pi Agent 架构教学文档 — 基于官方源码逐层拆解的 TypeScript AI Agent 框架学习指南，覆盖 LLM 抽象、Agent Loop、工具系统与上下文工程等。",
       "stack": [
-        "Python",
-        "MCP"
+        "TypeScript",
+        "Docs",
+        "AI Agent"
       ],
-      "link": "https://github.com/Albert-PZY/mcp-tutorial"
+      "link": "https://github.com/Albert-PZY/learn-pi-agent"
     }
   ],
   "experience": [
