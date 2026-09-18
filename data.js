@@ -18,7 +18,7 @@ window.RESUME_DATA = {
     "avatar": "https://avatars.githubusercontent.com/u/144330026?v=4",
     "location": "广东 / 远程&线下 / 可协商",
     "status": "随时入职 · 寻找 AI Agent 全栈开发岗位",
-    "summary": "具备 AI 应用全栈与 LLM Agent 工程实践能力，熟练使用 Codex、Claude Code、Cursor 等 AI 编程工具，并掌握 Vibe Coding 智能生成式开发范式，能够基于自然语言意图快速完成项目的工程化落地，高质量完成从需求拆解至代码交付的全流程协同开发与效率提升。深耕后端架构、异步并发、状态治理与评估落地，沉淀可复用的工程化方案，持续关注系统可用性、性能优化与工程可追溯性。",
+    "summary": "具备 AI Agent 全栈工程实践能力，熟悉 Codex、Claude Code、Pi、Deepseek Harness 等 AI 编程工具，掌握 Vibe Coding 开发范式，能够基于自然语言意图完成从需求拆解到代码交付的工程化落地。深耕后端架构、异步并发、状态治理与评估落地，沉淀可复用的工程化方案，持续关注高可用性、稳定性与工程可追溯性。",
     "about": [
       "学习驱动力强，做事细致，能快速拆解复杂任务并高效推进。",
       "具备良好的团队协作能力，竞赛中多次担任队长，与成员共同推进项目分工与进度。",
@@ -36,7 +36,7 @@ window.RESUME_DATA = {
   "highlights": [
     {
       "label": "技术栈",
-      "value": "Python / TS",
+      "value": "Python / TypeScript",
       "hint": "全栈深度使用"
     },
     {
@@ -61,18 +61,20 @@ window.RESUME_DATA = {
         "name": "编程语言",
         "items": [
           "Python",
+          "TypeScript",
           "Java",
-          "JavaScript",
-          "TS"
+          "JavaScript"
         ]
       },
       {
         "name": "后端与架构",
         "items": [
+          "Spring Boot",
           "FastAPI",
+          "Hono",
+          "RESTful API",
           "Asyncio",
-          "WebSocket",
-          "RESTful API"
+          "WebSocket"
         ]
       },
       {
@@ -80,10 +82,9 @@ window.RESUME_DATA = {
         "items": [
           "RAG",
           "LLM Agent",
-          "LangChain",
-          "LangGraph",
-          "Spring AI",
+          "MCP",
           "Prompt Engineering",
+          "Agent Runtime",
           "AI Coding"
         ]
       },
@@ -92,19 +93,22 @@ window.RESUME_DATA = {
         "items": [
           "MySQL",
           "PostgreSQL",
-          "Redis"
+          "Redis",
+          "SQLite",
+          "Milvus",
+          "Elasticsearch"
         ]
       },
       {
         "name": "前端与运维",
         "items": [
           "Vue.js",
+          "React",
+          "Streamlit",
           "HTML/CSS",
           "Docker",
           "Linux",
-          "Nginx",
-          "RabbitMQ",
-          "K8s"
+          "Nginx"
         ]
       }
     ]
@@ -234,23 +238,21 @@ window.RESUME_DATA = {
       "period": "2025.11 - 2026.02",
       "location": "Python、Redis、MySQL、Vue.js | Novara AI 初创项目",
       "bullets": [
-        "通过 FastAPI + Asyncio 重写核心执行链路中原有的同步阻塞流程与低效文件交互，使系统并发承载能力提升 50 倍以上、接口响应延迟降低 90% 以上，缓解高峰请求下的排队拥塞问题",
+        "通过 FastAPI + Asyncio 重写核心执行链路中原有的同步阻塞流程与低效文件交互，使系统并发承载能力提升 50 倍以上、接口响应延迟降低 90% 以上，缓解高峰请求下的排队拥塞问题。",
         "通过会话 ID、独立工作目录与会话级异步锁实现会话隔离机制，稳定解决多用户并发下上下文串扰与覆盖写入问题，避免任务结果互相污染。",
         "建设会话网关统一处理会话创建/销毁、鉴权、CDP/noVNC 代理、WebSocket 转发与空闲回收，解决远程浏览器任务生命周期管理分散导致的稳定性问题。",
-        "围绕“长会话状态易漂移、恢复成本高”的痛点，设计 Redis 热状态 + MySQL 持久化的状态治理方案，提升任务中断后的恢复能力与链路连续性。",
-        "搭建事件日志 + SSE 实时推送的可观测链路，支持任务回放、审计追踪与异常定位排障，缩短问题发现与定位路径。"
+        "围绕“长会话状态易漂移、恢复成本高”的痛点，设计 Redis 热状态 + MySQL 持久化的状态治理方案，并搭建事件日志 + SSE 实时推送的可观测链路，支持任务回放、审计追踪与异常定位排障。"
       ]
     },
     {
       "org": "校园智能 RAG 信息检索系统",
       "role": "全栈开发",
       "period": "2025.07 - 2025.09",
-      "location": "Python、ChromaDB、Streamlit、React | 校内已落地项目",
+      "location": "Python、Elasticsearch、Milvus、PostgreSQL、React | 校内已落地项目",
       "bullets": [
-        "针对“校园信息分散、单路召回命中不足”的痛点，采用 BM25 稀疏检索 + Dense 语义检索双路召回，通过 RRF 融合与多策略可选重排机制，使离线样例集 Hit Rate@10 从 0.72 提升至 0.84。",
-        "建设端到端 Ingestion Pipeline，并基于 SHA256 + SQLite 实现增量摄取与幂等更新，重复摄取场景平均任务耗时下降约 41%，重复文档跳过率约 58%，减少无效计算。",
-        "针对 Dense/Sparse 与 Rerank 后端不稳定问题设计可回退降级路径，保障单路异常时查询链路仍可连续服务。",
-        "围绕查询解析、召回、融合、重排记录结构化追踪信息与中间结果，并通过 Streamlit Dashboard 与离线评估脚本 + 基准问答集持续优化检索效果。",
+        "针对“校园信息分散、单路召回命中不足”的痛点，采用 Elasticsearch BM25 稀疏检索 + Milvus 稠密向量检索双路召回，通过 RRF 融合与多策略可选重排机制，使离线样例集 Hit Rate@10 从 0.72 提升至 0.84。",
+        "建设端到端 Ingestion Pipeline，并基于 SHA256 + PostgreSQL 实现增量摄取与幂等更新，重复摄取场景平均任务耗时下降约 41%，重复文档跳过率约 58%，减少无效计算。",
+        "针对 Dense/Sparse 与 Rerank 后端不稳定问题设计可回退降级路径，保障单路异常时查询链路仍可连续服务；围绕查询解析、召回、融合、重排记录结构化追踪信息，并通过 Streamlit Dashboard 与基准问答集持续优化检索效果。",
         "面向“检索能力难复用”的问题，基于 MCP 协议沉淀知识检索、集合管理与文档摘要能力，便于外部系统标准化接入与复用。"
       ]
     }
